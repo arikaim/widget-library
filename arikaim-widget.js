@@ -7,7 +7,7 @@
 'use strict';
 
 (function() {
-    const ARIKAIM_WIDGET_VERSION = '0.5.1';
+    var ARIKAIM_WIDGET_VERSION = '0.5.1';
 
     function loadScript(url, onLoad, async) {
         var script = document.createElement('script');
@@ -47,15 +47,13 @@
     var currentScript = document.currentScript;
     var url = new URL(currentScript.src);
 
-
     console.log(url);
 
-    const LIBRARY_URL = url.href.replace('widget/arikaim-widget.js','');
-    const WIDGET_UUID = currentScript.getAttribute('widget-container');
-    const CONTANTER_CLASS = "widget-container-" + WIDGET_UUID;
- 
-    const ARIKAIM_HOST = url.origin;
-    var jQuery, $;
+    var LIBRARY_URL = url.href.replace('widget/arikaim-widget.js','');
+    var WIDGET_UUID = currentScript.getAttribute('widget-container');
+    var CONTANTER_CLASS = "widget-container-" + WIDGET_UUID;
+    var ARIKAIM_HOST = url.origin;
+   // var jQuery, $;
 
     console.log(WIDGET_UUID);
     console.log(CONTANTER_CLASS);
@@ -63,12 +61,11 @@
  
 
     // Load Jquery
-    loadScript(LIBRARY_URL + 'jquery/jquery-3.4.1.min.js',function() {
-        $ = jQuery = window.jQuery.noConflict(true);      
+    loadScript(LIBRARY_URL + 'jquery/jquery-3.6.1.min.js',function() {
+       // $ = jQuery = window.jQuery.noConflict(true);      
         console.log('jQuery loaded.');
-
         loadScript(LIBRARY_URL + 'arikaim/arikaim.js',function() {
-            //console.log('Arikaim lib loaded.');
+            console.log('Arikaim lib loaded.');
 
             arikaim.setHost(ARIKAIM_HOST);
             arikaim.setBaseUrl('/arikaim');
@@ -84,7 +81,7 @@
 
     function loadWidget() {
         // include files
-        arikaim.get('/api/widget/includes/' + WIDGET_UUID,function(result) {
+        arikaim.get('/api/widgets/includes/' + WIDGET_UUID,function(result) {
 
             result.js.forEach(item => {
                 console.log(item);
