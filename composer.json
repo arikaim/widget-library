@@ -1,0 +1,17 @@
+{
+    "name": "arikaim/widget-library",
+    "description": "Arikaim CMS html widget library",
+    "keywords": ["UI","Arikaim"],
+    "type": "arikaim-library",
+    "license": "GPL-3.0-or-later",
+    "authors": [{
+        "name": "Arikaim CMS",
+        "email": "info@arikaim.com",
+        "homepage": "http://arikaim.com"
+    }],
+    "require": {
+    },
+    "extra": {
+        "path": "widget"
+    }
+}
