@@ -30,15 +30,10 @@
     var BASE_URL = url.href.split('/')[3];
     var LIBRARY_URL = url.href.replace('widget/arikaim-widget.js','');
     var WIDGET_UUID = currentScript.getAttribute('widget-container');
-    var CONTANTER_CLASS = "widget-container-" + WIDGET_UUID;
+    var CONTANTER_ID = "widget-container-" + WIDGET_UUID;
     var ARIKAIM_HOST = url.origin;
     var REMOTE_URL = ARIKAIM_HOST + '/' + BASE_URL;
-   // var jQuery, $;
-
-   // console.log(ARIKAIM_HOST);    
-   // console.log(CONTANTER_CLASS);
-   // console.log(LIBRARY_URL);
- 
+  
     // Load Jquery
     loadScript(LIBRARY_URL + 'jquery/jquery-3.6.1.min.js',function() {
        // $ = jQuery = window.jQuery.noConflict(true);      
@@ -58,20 +53,22 @@
         
             loadWidgetIncludeFiles(result.include.js,function() {
                 loadWidgetFiles(result.component.js,function() {
-                    // load css file
-
-                    console.log(result.component);
-                    console.log(REMOTE_URL + '/arikaim/view/templates/blog/components/widget/widget.css');
-
-                    arikaim.includeCSSFile(REMOTE_URL + '/arikaim/view/templates/blog/components/widget/widget.css')
-                    console.log('Widget loaded.');
-                    $('.' + CONTANTER_CLASS).html(result.component.html);
-                    render();
+                    // load css files                  
+                    loadWidgetCssFiles(result.component.css) 
+                    renderWidget(result.component);                    
                 });
             });
 
         }); 
     };
+
+    function renderWidget(component) {
+       // console.log(component);
+        console.log('Render widget.');
+        $('#' + CONTANTER_ID).html(component.html);
+        // call widget entry point
+        callFunction(window[component.main],CONTANTER_ID);       
+    }
 
     function loadWidgetIncludeFiles(items, onSuccess) {
         console.log('Load widget include files.');
@@ -104,6 +101,14 @@
                     return;
                 }
             });                         
+        }); 
+    }
+
+    function loadWidgetCssFiles(items) {
+        items.forEach(function(item) {
+            var url = ARIKAIM_HOST + item.url             
+            arikaim.includeCSSFile(url);
+            console.log('Wiget css file loaded: ' + url);                
         }); 
     }
 
