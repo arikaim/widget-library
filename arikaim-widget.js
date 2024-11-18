@@ -7,7 +7,7 @@
 'use strict';
 
 (function() {
-    var ARIKAIM_WIDGET_VERSION = '1.0.1';
+    var ARIKAIM_WIDGET_VERSION = '1.0.2';
 
     function loadScript(url, onLoad, async) {
         var script = document.createElement('script');
@@ -48,43 +48,44 @@
 
     function loadWidget() {
         arikaim.get('/api/widgets/component/' + WIDGET_UUID,function(result) {
-            loadWidgetIncludeFiles(result.include.js,function() {
+            loadWidgetJsFiles(result.include.js,function(loaded) {
                 loadWidgetCssFiles(result.include.css);
+                
+                // load component
                 arikaim.ui.loadComponent({
                     mountTo: CONTANTER_ID,
                     component: result.component,
                     params: {
-        
                     }
                 });
             });
         });
     };
 
-    function loadWidgetIncludeFiles(items, onSuccess) {
+    function loadWidgetJsFiles(items, onSuccess) {
         console.log('Load widget js files.');
         var loaded = 0;       
 
         items.forEach(function(item) {
             var url = REMOTE_URL + item;   
-           
             loadScript(url,function() {
-                console.log('Wiget js file loaded: ' + url);
+                console.log('Wiget js include file loaded: ' + url);
                 loaded++;
-                if (loaded => items.length) {
+                if (loaded >= items.length) {
                     onSuccess(loaded);
                     return;
                 }
             });                         
         }); 
-        onSuccess(loaded);
     }
 
     function loadWidgetCssFiles(items) {
+        console.log('Load widget css files.');
+
         items.forEach(function(item) {
-            var url = ARIKAIM_HOST + item.url             
+            var url = REMOTE_URL + item; 
             arikaim.includeCSSFile(url);
-            console.log('Wiget css file loaded: ' + url);                
+            console.log('Wiget css include file loaded: ' + url);                
         }); 
     }
 
